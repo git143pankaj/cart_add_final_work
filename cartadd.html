@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>cartfile</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="css/custom.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+
+
+
+    
+ 
+</head>
+<body>
+<header>
+	<div class="wrapper">
+		<div class="container">
+		<div class="navbar">
+			<div class="menu">
+				<a class="navbar-brand" href="index.html"><i class="fa fa-star" aria-hidden="true"></i></a>
+				<!-- <ul>	
+					<li><a href="#">Home</a></li>
+					<li><a href="#">Home</a></li>
+					<li><a href="#">Home</a></li>
+					<li><a href="#">Home</a></li>
+				</ul> -->
+			</div>
+
+			<div class="searchbar">
+				<input type="text" placeholder="Search">
+				<div class="icon"><i class="fa fa-search" aria-hidden="true"></i></div>				
+			</div>
+	<span class="carticon"><i class="fa fa-shopping-cart" id="opencart"></i></span>
+			
+		</div>
+	</div>
+</div>
+
+</header>
+	<div class="clearfix"></div>
+
+	<!-- <div class="row" id="tab_product_cart_list"></div>   
+    <div class="modal-body selected_product_list" > -->
+ 
+  <!-- <div class="container"> -->
+  	<div class="cart_div1"></div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript">
+	function rangeSlider(value){
+		document.getElementById('rangeValue').innerHTML = value;
+	};
+</script>
+
+<script>
+	$(document).on('click', 'ul li', function(){
+		$(this).addClass('active').siblings().removeClass('active');
+	});
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".fa-search").click(function(){
+			$(".icon").toggleClass("active");
+			$("input[type='text']").toggleClass("active");
+		});
+	});
+	
+	// function addCart(){
+		$(document).on('click','.select_product',function(){
+			// var id = $(this).data('id');
+			$(this).off('click');
+			$(this).text('Added to cart');
+			$(this).removeClass('select_product');
+			// $(this).attr("disabled","disabled");
+		if($(".carticon").find(".count").length==1){
+			$(".carticon").find(".count").text(parseInt($(".carticon").find(".count").text())+1);
+		}
+		else{
+			$(".carticon").append("<span class='count'>1</span>");
+				}
+			});
+	// }
+</script>
+
+ <script src="js/main.js"></script>
+
+	<script type="text/javascript">
+		var cart_val=localStorage.getItem("cart_id");
+		if(cart_val.indexOf(",")>-1){
+			cart_val=cart_val.split(",");
+			cart_val = cart_val.filter(function (el) { 
+                return el != null; 
+            });
+		}
+		else{
+			var cart_val=[cart_val];
+		}
+		$(document).ready(function(){
+  			var price_arr = [];
+			$.get('https://api.myjson.com/bins/qzuzi', function(data, status){
+				var product_list = '';
+	      		var product_list_cart = '';
+	      		var grandtotal = 0;
+	      		product_list += '<div class="col-md-12 col-sm-6 col-xs-12 each_item cart_details" i_price="320" i_discount="5"><div class="cart_div"><div class="price_details"><div>Total : <span><i class="fas fa-rupee-sign"></i></span><span id="total">0.00</span></div></div>'
+	      		//console.log(data);
+				for (var i = 0; i< data.length; i++) {					
+					if($.inArray(data[i].id.toString(),cart_val)>-1){
+					price_arr.push(data[i].price);
+					grandtotal = grandtotal + data[i].price;
+					/*product_list += ' <div class="container"><div class="col-md-12 col-sm-6 col-xs-12 each_item cart_details" i_price="'+data[i].price+'" i_discount="'+data[i].discount+'"><div class="cart_div"><div class="pict"><div class="price_details"><div>Total : <span><i class="fas fa-rupee-sign"></i></span><span id="total">0.00</span></div></div>';*/
+					// product_list += '<img class="card-img-top" src="'+data[i].img_url+'" alt="Card image cap"/> <div class="card-body">  <h4 class="card-title"><a>'+ data[i].name +'</a></h4><p class="card-text"><i class="fas fa-rupee-sign"></i>'+data[i].price+' <span class="grey"><del><i class="fas fa-rupee-sign"></i>'+data[i].discount+'</del></span> <span class="grn">'+data[i].discount+'% off</span></p><a href="#" class="btn btn-primary select_product" data-price="'+data[i].price+'" data-discount="'+data[i].discount+'" data-image="'+data[i].img_url+'" data-name="'+data[i].name+'" data-id="'+data[i].id+'" >Add to Cart</a></div></div></div></div>';
+
+					product_list += '<div class="pict" margin-bottom:15px;"><img class="card-img-top" src="'+data[i].img_url+'" alt="Card image cap" width = "100px" height = "100px"/><div class="rgt_cont"><h4 class="item_class"><a>'+ data[i].name +'</a></h4><p class="card-text_'+data[i].id+'"><i class="fas fa-rupee-sign"></i><span class="price">'+data[i].price+'</span><span class="grey"><del><i class="fas fa-rupee-sign"></i>'+data[i].discount+'</del></span><span class="grn">'+data[i].discount+'% off</span></p><div class="add-del-btn"><button type="button" class="altera decrescimo left" style="height:40px; width:40px;" data-price="'+data[i].price+'" data-id="'+data[i].id+'">-</button><input type="text" style="width:40px;text-align:center; height:40px;" data-price="'+data[i].price+'" id="'+data[i].id+'_mid_num" value="1"><button type="button" class=" add altera acrescimo left" style="height:40px; width:40px;" data-price="'+data[i].price+'" data-id="'+data[i].id+'">+</button><a href="#" class="btn btn-primary select_product bt_set" data-price="'+data[i].price+'" data-discount="'+data[i].discount+'" data-image="'+data[i].img_url+'" data-name="'+data[i].name+'" data-id="'+data[i].id+'">Remove items</a></div></div></div><div class="clearfix"></div>';
+
+
+					
+					}
+	        
+				}
+				product_list += '</div></div>';
+				//console.log(grandtotal);
+				$('.cart_div1').after(product_list);
+				$("#total").text(grandtotal);
+			});
+		});
+	</script>
+  	
+</body>
+</html>
+
+
